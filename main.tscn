@@ -1,6 +1,41 @@
 [gd_scene format=3 uid="uid://dtmikdru1ltno"]
 
 [ext_resource type="Script" uid="uid://co87viwac71ta" path="res://main.gd" id="1_ig7tw"]
+[ext_resource type="PackedScene" uid="uid://0wsxhwomhuay" path="res://scenes/player/player.tscn" id="2_0xm2m"]
+
+[sub_resource type="BoxMesh" id="BoxMesh_yf2hq"]
+size = Vector3(10, 1, 10)
+
+[sub_resource type="StandardMaterial3D" id="StandardMaterial3D_0xm2m"]
+vertex_color_use_as_albedo = true
+vertex_color_is_srgb = true
+
+[sub_resource type="BoxMesh" id="BoxMesh_0xm2m"]
+material = SubResource("StandardMaterial3D_0xm2m")
+
+[sub_resource type="MultiMesh" id="MultiMesh_dxoup"]
+transform_format = 1
+use_colors = true
+use_custom_data = true
+mesh = SubResource("BoxMesh_0xm2m")
 
 [node name="Node" type="Node" unique_id=96462440]
 script = ExtResource("1_ig7tw")
+world_size = Vector3i(200, 50, 200)
+terrain_colors = Array[Color]([Color(0.25707874, 0.612045, 0.22233993, 1), Color(0.5723957, 0.337561, 0.18767396, 1), Color(0.31347975, 0.24264392, 0.24514717, 1)])
+cut_off = 0.30000000000000004
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1776104704]
+transform = Transform3D(0.70710677, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.70710677, -0.49999997, 0.49999997, -6, 6, 6)
+
+[node name="Player" parent="." unique_id=401728768 instance=ExtResource("2_0xm2m")]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1, -2, 1)
+flying = true
+
+[node name="Floor" type="CSGMesh3D" parent="." unique_id=591018535]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
+use_collision = true
+mesh = SubResource("BoxMesh_yf2hq")
+
+[node name="TerrainMesh" type="MultiMeshInstance3D" parent="." unique_id=260497337]
+multimesh = SubResource("MultiMesh_dxoup")
