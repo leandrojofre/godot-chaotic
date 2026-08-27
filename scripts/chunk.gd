@@ -29,7 +29,10 @@ var face_colors: Dictionary[Face, Color] = {}
 func _ready() -> void:
 	surface_array.resize(Mesh.ARRAY_MAX)
 	mesh_instance.mesh = ArrayMesh.new()
-	init_cube(1)
+
+	if voxels.is_empty(): return
+
+	commit_mesh()
 
 func random_noise(noise: Noise, x: int, y: int) -> float:
 	var noise_first = noise.get_noise_2d(x, y)
@@ -51,19 +54,19 @@ func generate_data(chunk_size: int, max_height: int, noise: Noise, block_colors:
 			var local_height = height - position.y
 
 			for y in range(min(local_height, chunk_size)):
-				voxels.set(Vector3(x, y, z), block_colors.get(y % block_colors.size()))
+				var color_size = block_colors.size() if block_colors.size() != 0 else 1
+				var chosen_color_idx = floor(position.y / (max_height / color_size))
+				var chosen_color = block_colors.get(max(chosen_color_idx, 0))
+
+				voxels.set(Vector3(x, y, z), chosen_color)
 
 func generate_mesh() -> void:
-	if voxels.is_empty(): return
-
 	for offset in voxels:
 		var color = voxels[offset]
 
 		for face in Face:
 			if not has_neighbour(voxels, Face[face], offset):
 				add_face(Face[face], offset, color)
-
-	commit_mesh()
 
 func commit_mesh() -> void:
 	surface_array[Mesh.ARRAY_VERTEX] = vertices

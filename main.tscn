@@ -23,6 +23,5 @@ use_collision = true
 mesh = SubResource("BoxMesh_yf2hq")
 
 [node name="ChunkManager" parent="." unique_id=1103089619 instance=ExtResource("3_h2yge")]
-world_size = Vector3i(128, 128, 128)
-noise_seed = 1
+world_size = Vector3i(256, 128, 256)
 terrain_colors = Array[Color]([Color(0.3863641, 0.6181621, 0.34510916, 1), Color(0.5027145, 0.3517389, 0.24079552, 1), Color(0.27827233, 0.25227037, 0.2906556, 1)])
