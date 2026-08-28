@@ -43,9 +43,9 @@ func random_noise(noise: Noise, x: int, y: int) -> float:
 	return noise_p
 
 func generate_data(chunk_size: int, max_height: int, noise: Noise, block_colors: Array[Color]) -> void:
-	var height_ratio: int = max_height / max(block_colors.size(), 1)
+	var height_ratio: int = (max_height / 2) / max(block_colors.size(), 1)
 	var color_idx: int = int(position.y / height_ratio) if position.y > 0 else 0
-	var chunk_color = block_colors.get(color_idx)
+	var chunk_color = block_colors.get(min(color_idx, max(block_colors.size() - 1, 0)))
 
 	for x in range(chunk_size):
 		for z in range(chunk_size):
