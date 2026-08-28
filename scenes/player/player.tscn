@@ -39,6 +39,6 @@ frame_progress = 0.042355325
 [node name="Head" type="Node3D" parent="." unique_id=1223656195]
 
 [node name="Camera" type="Camera3D" parent="Head" unique_id=1866921367]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 2)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 2, 1.5)
 current = true
 fov = 90.0

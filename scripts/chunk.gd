@@ -43,6 +43,10 @@ func random_noise(noise: Noise, x: int, y: int) -> float:
 	return noise_p
 
 func generate_data(chunk_size: int, max_height: int, noise: Noise, block_colors: Array[Color]) -> void:
+	var height_ratio: int = max_height / max(block_colors.size(), 1)
+	var color_idx: int = int(position.y / height_ratio) if position.y > 0 else 0
+	var chunk_color = block_colors.get(color_idx)
+
 	for x in range(chunk_size):
 		for z in range(chunk_size):
 			var global_offset = Vector2(x + position.x, z  + position.z)
@@ -54,11 +58,7 @@ func generate_data(chunk_size: int, max_height: int, noise: Noise, block_colors:
 			var local_height = height - position.y
 
 			for y in range(min(local_height, chunk_size)):
-				var color_size = block_colors.size() if block_colors.size() != 0 else 1
-				var chosen_color_idx = floor(position.y / (max_height / color_size))
-				var chosen_color = block_colors.get(max(chosen_color_idx, 0))
-
-				voxels.set(Vector3(x, y, z), chosen_color)
+				voxels.set(Vector3(x, y, z), chunk_color)
 
 func generate_mesh() -> void:
 	for offset in voxels:

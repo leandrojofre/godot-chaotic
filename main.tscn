@@ -23,5 +23,13 @@ use_collision = true
 mesh = SubResource("BoxMesh_yf2hq")
 
 [node name="ChunkManager" parent="." unique_id=1103089619 instance=ExtResource("3_h2yge")]
-world_size = Vector3i(256, 128, 256)
-terrain_colors = Array[Color]([Color(0.3863641, 0.6181621, 0.34510916, 1), Color(0.5027145, 0.3517389, 0.24079552, 1), Color(0.27827233, 0.25227037, 0.2906556, 1)])
+world_size = Vector3i(256, 256, 256)
+chunk_length = 32
+terrain_colors = Array[Color]([Color(0.837211, 0.9134603, 1, 1), Color(0.7641504, 0.80737966, 0.9996548, 1), Color(0.4347703, 0.56099635, 0.30083403, 1), Color(0.2746519, 0.5311539, 0.353925, 1), Color(0.5027145, 0.3517389, 0.24079552, 1), Color(0.27827233, 0.25227037, 0.2906556, 1), Color(0.20331475, 0.15861067, 0.17717215, 1), Color(0.10094557, 0.07919847, 0.07363192, 1)])
+
+[node name="Seed" type="Label" parent="." unique_id=387192898]
+offset_right = 1.0
+offset_bottom = 23.0
+mouse_filter = 1
+
+[connection signal="gui_input" from="Seed" to="." method="_on_seed_gui_input"]

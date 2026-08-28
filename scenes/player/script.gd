@@ -12,26 +12,50 @@ const JUMP_VELOCITY = 9
 
 
 func _physics_process(delta: float) -> void:
+	var running = false
+	var jumping = false
+	var crouching = false
+
+	if Input.is_action_just_pressed("toggle_fly"):
+		flying = !flying
+
+	if Input.is_action_pressed("run"):
+		running = true
+
+	if Input.is_action_pressed("jump"):
+		jumping = true
+
+	if Input.is_action_pressed("crouch"):
+		crouching = true
+
 	if not is_on_floor():
 		if flying:
 			velocity = Vector3.ZERO 
 		else:
 			velocity += get_gravity() * delta
 
-	if Input.is_action_pressed("jump") and is_on_floor():
+	if crouching and flying:
+		velocity.y = JUMP_VELOCITY * -(10 if running else 5)
+	if jumping and flying:
+		velocity.y = JUMP_VELOCITY * (10 if running else 5)
+	elif jumping and is_on_floor():
 		velocity.y = JUMP_VELOCITY
 
-	if Input.is_action_pressed("jump") and flying:
-		velocity.y = JUMP_VELOCITY
+	if Input.is_action_just_pressed("pause"):
+		var capture_cursor = Input.mouse_mode != Input.MOUSE_MODE_VISIBLE
+		var new_mode = Input.MOUSE_MODE_VISIBLE if capture_cursor else Input.MOUSE_MODE_CAPTURED
 
-	if Input.is_action_just_pressed("toggle_fly"):
-		flying = !flying
+		Input.mouse_mode = new_mode
 
 	var speed = SPEED
 	var input_dir := Input.get_vector("move_west", "move_east", "move_north", "move_south")
 	var direction := (camera.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
-	if Input.is_action_pressed("run"):
+	if flying and running:
+		speed = SPEED * 10
+	elif flying:
+		speed = SPEED * 5
+	elif running:
 		speed = SPEED * 2
 
 	if direction:
