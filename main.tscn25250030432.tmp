@@ -2,13 +2,18 @@
 
 [ext_resource type="Script" uid="uid://co87viwac71ta" path="res://main.gd" id="1_ig7tw"]
 [ext_resource type="PackedScene" uid="uid://0wsxhwomhuay" path="res://scenes/player/player.tscn" id="2_0xm2m"]
-[ext_resource type="PackedScene" uid="uid://b1iqd6libfyg6" path="res://scenes/chunk_manager.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cqyv6s6sm8smo" path="res://scenes/terrain_multi_mesh.tscn" id="3_1bvp3"]
+[ext_resource type="PackedScene" uid="uid://cif5x8kb11pi4" path="res://scenes/chunk.tscn" id="3_h2yge"]
+[ext_resource type="PackedScene" uid="uid://cxxa2x6d02nwb" path="res://scenes/terrain_mesh.tscn" id="4_1bvp3"]
 
 [sub_resource type="BoxMesh" id="BoxMesh_yf2hq"]
 size = Vector3(10, 1, 10)
 
 [node name="Node" type="Node" unique_id=96462440]
 script = ExtResource("1_ig7tw")
+world_size = Vector3i(200, 75, 200)
+terrain_colors = Array[Color]([Color(0.25707874, 0.612045, 0.22233993, 1), Color(0.5723957, 0.337561, 0.18767396, 1), Color(0.31347975, 0.24264392, 0.24514717, 1)])
+cut_off = 0.30000000000000004
 
 [node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=1776104704]
 transform = Transform3D(0.70710677, 0.49999997, -0.49999997, 0, 0.70710677, 0.70710677, 0.70710677, -0.49999997, 0.49999997, -6, 6, 6)
@@ -22,14 +27,10 @@ transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, -4, 0)
 use_collision = true
 mesh = SubResource("BoxMesh_yf2hq")
 
-[node name="ChunkManager" parent="." unique_id=1103089619 instance=ExtResource("3_h2yge")]
-world_size = Vector3i(256, 256, 256)
-chunk_length = 32
-terrain_colors = Array[Color]([Color(0.837211, 0.9134603, 1, 1), Color(0.7641504, 0.80737966, 0.9996548, 1), Color(0.4347703, 0.56099635, 0.30083403, 1), Color(0.2746519, 0.5311539, 0.353925, 1), Color(0.5027145, 0.3517389, 0.24079552, 1), Color(0.27827233, 0.25227037, 0.2906556, 1), Color(0.20331475, 0.15861067, 0.17717215, 1), Color(0.10094557, 0.07919847, 0.07363192, 1)])
+[node name="TerrainMultiMesh" parent="." unique_id=1954485509 instance=ExtResource("3_1bvp3")]
+visible = false
 
-[node name="Seed" type="Label" parent="." unique_id=387192898]
-offset_right = 1.0
-offset_bottom = 23.0
-mouse_filter = 1
+[node name="TerrainMesh" parent="." unique_id=849172602 instance=ExtResource("4_1bvp3")]
+visible = false
 
-[connection signal="gui_input" from="Seed" to="." method="_on_seed_gui_input"]
+[node name="Chunk" parent="." unique_id=1716294836 instance=ExtResource("3_h2yge")]
