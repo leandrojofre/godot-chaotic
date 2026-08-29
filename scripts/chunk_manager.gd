@@ -85,7 +85,7 @@ static func get_split(pieces: int) -> Vector2i:
 	return Vector2i(x, y)
 
 func generate_chunks(start_position: Vector3i, chunks_to_load: Vector3i) -> void:
-	var total_chunks_to_load = chunks_to_load.x * chunks_to_load.y * chunks_to_load.z
+	var total_chunks_to_load: int = chunks_to_load.x * chunks_to_load.y * chunks_to_load.z
 
 	for pos_y in range(total_chunks_to_load):
 		var pos_z: int = (pos_y / chunks_to_load.y) if chunks_to_load.y > 0 else 0
@@ -96,7 +96,7 @@ func generate_chunks(start_position: Vector3i, chunks_to_load: Vector3i) -> void
 				pos_z % chunks_to_load.z,
 		)
 
-		var new_chunk = chunk_class.instantiate()
+		var new_chunk: Chunk = chunk_class.instantiate()
 		new_chunk.position = (position * chunk_length) + start_position
 
 		generate_chunk_data(new_chunk)

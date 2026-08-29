@@ -35,36 +35,36 @@ func _ready() -> void:
 	commit_mesh()
 
 func random_noise(noise: Noise, x: int, y: int) -> float:
-	var noise_first = noise.get_noise_2d(x, y)
-	var noise_double = noise.get_noise_2d(x * 2, y * 2) * 0.5
-	var noise_fourth = noise.get_noise_2d(x * 4, y * 4) * 0.25
-	var noise_calc = ((noise_first + noise_double + noise_fourth) / 1.75 + 1) / 2
-	var noise_p = pow(noise_calc, 2.1)
+	var noise_first: float = noise.get_noise_2d(x, y)
+	var noise_double: float = noise.get_noise_2d(x * 2, y * 2) * 0.5
+	var noise_fourth: float = noise.get_noise_2d(x * 4, y * 4) * 0.25
+	var noise_calc: float = ((noise_first + noise_double + noise_fourth) / 1.75 + 1) / 2
+	var noise_p: float = pow(noise_calc, 2.1)
 	return noise_p
 
 func generate_data(chunk_size: int, max_height: int, noise: Noise, block_colors: Array[Color]) -> void:
 	var height_ratio: int = (max_height / 2) / max(block_colors.size(), 1)
 	var color_idx: int = int(position.y / height_ratio) if position.y > 0 else 0
-	var chunk_color = block_colors.get(min(color_idx, max(block_colors.size() - 1, 0)))
+	var chunk_color: Color = block_colors.get(min(color_idx, max(block_colors.size() - 1, 0)))
 
 	for x in range(chunk_size):
 		for z in range(chunk_size):
-			var global_offset = Vector2(x + position.x, z  + position.z)
-			var random = random_noise(noise, global_offset.x, global_offset.y)
-			var height = max_height * random
+			var global_offset := Vector2i(x + int(position.x), z  + int(position.z))
+			var random: float = random_noise(noise, global_offset.x, global_offset.y)
+			var height := int(max_height * random)
 
 			if height < position.y: continue
 
-			var local_height = height - position.y
+			var local_height := int(height - position.y)
 
 			for y in range(min(local_height, chunk_size)):
 				voxels.set(Vector3(x, y, z), chunk_color)
 
 func generate_mesh() -> void:
 	for offset in voxels:
-		var color = voxels[offset]
+		var color: Color = voxels[offset]
 
-		for face in Face:
+		for face: String in Face:
 			if not has_neighbour(voxels, Face[face], offset):
 				add_face(Face[face], offset, color)
 
@@ -73,7 +73,7 @@ func commit_mesh() -> void:
 	surface_array[Mesh.ARRAY_NORMAL] = normals
 	surface_array[Mesh.ARRAY_COLOR] = colors
 
-	var mesh = mesh_instance.mesh
+	var mesh: Mesh = mesh_instance.mesh
 
 	mesh.add_surface_from_arrays(Mesh.PRIMITIVE_TRIANGLES, surface_array)
 	mesh.surface_set_material(0, material)
@@ -81,16 +81,16 @@ func commit_mesh() -> void:
 	hitbox.shape = mesh.create_trimesh_shape()
 
 func add_face(face: Face, offset: Vector3, color: Color) -> void:
-	var indexes = face_indexes[face]
+	var triangles: Array = face_indexes[face]
 
-	for triangle in indexes:
-		for index in triangle:
+	for triangle: Array in triangles:
+		for index: int in triangle:
 			vertices.append(cube_vertices[index] + offset)
 			normals.append(face_normals[face])
 			colors.append(color)
 
 func has_neighbour(data: Dictionary[Vector3, Color], face: Face, offset: Vector3) -> bool:
-	var neighbour_position = offset + face_normals[face]
+	var neighbour_position: Vector3 = offset + face_normals[face]
 
 	if data.has(neighbour_position): return true
 	return false

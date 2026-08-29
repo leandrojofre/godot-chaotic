@@ -1,8 +1,8 @@
 extends CharacterBody3D
 
 
-const SPEED = 5.0
-const JUMP_VELOCITY = 9
+const SPEED: float = 5.0
+const JUMP_VELOCITY: float = 9
 
 @export var camera_sensitivity: float = 0.006
 @export var flying: bool = false
@@ -12,9 +12,9 @@ const JUMP_VELOCITY = 9
 
 
 func _physics_process(delta: float) -> void:
-	var running = false
-	var jumping = false
-	var crouching = false
+	var running: bool = false
+	var jumping: bool = false
+	var crouching: bool = false
 
 	if Input.is_action_just_pressed("toggle_fly"):
 		flying = !flying
@@ -42,12 +42,11 @@ func _physics_process(delta: float) -> void:
 		velocity.y = JUMP_VELOCITY
 
 	if Input.is_action_just_pressed("pause"):
-		var capture_cursor = Input.mouse_mode != Input.MOUSE_MODE_VISIBLE
-		var new_mode = Input.MOUSE_MODE_VISIBLE if capture_cursor else Input.MOUSE_MODE_CAPTURED
+		var capture_cursor: int = Input.mouse_mode != Input.MOUSE_MODE_VISIBLE
 
-		Input.mouse_mode = new_mode
+		Input.mouse_mode = Input.MOUSE_MODE_VISIBLE if capture_cursor else Input.MOUSE_MODE_CAPTURED
 
-	var speed = SPEED
+	var speed: float = SPEED
 	var input_dir := Input.get_vector("move_west", "move_east", "move_north", "move_south")
 	var direction := (camera.global_transform.basis * Vector3(input_dir.x, 0, input_dir.y)).normalized()
 
@@ -73,7 +72,7 @@ func _physics_process(delta: float) -> void:
 
 func _unhandled_input(event: InputEvent) -> void:
 	if event is InputEventMouseMotion:
-		var camera_rotation = event.relative * camera_sensitivity
+		var camera_rotation: Vector2 = event.relative * camera_sensitivity
 		head.rotate_y(-camera_rotation.x)
 		camera.rotate_x(-camera_rotation.y)
 		camera.rotation.x = clamp(camera.rotation.x, deg_to_rad(-40), deg_to_rad(90))
